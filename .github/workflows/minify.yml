@@ -1,33 +1,18 @@
-name: Minify HTML
-on:
-  push:
-    branches: [ main ]
+name: minisauras
+
+on: [push]
 
 jobs:
-  minify-html:
-    runs-on: ubuntu-latest
+  read:
+    runs-on: ubuntu-18.04
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Find index.html
-        run: |
-          cd ${{ github.workspace }}
-          find . -name "index.html" -type f -print -quit > index_file_path.txt
-      
-      - name: Minify HTML
-        uses: elstudio/html-minifier-action@v2
-        with:
-          src: $(cat index_file_path.txt)
-          dest: index.min.html
-          args: --remove-comments --collapse-whitespace
-      
-      - name: Remove original index.html
-        run: |
-          cd ${{ github.workspace }}
-          rm $(cat index_file_path.txt)
-      
-      - name: Rename minified file to index.html
-        run: |
-          cd ${{ github.workspace }}
-          mv index.min.html $(cat index_file_path.txt)
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: minisauras
+      uses: TeamTigers/minisauras@v2.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      id: dir
+      with:
+        directory: './' ## minify all files from root directory
